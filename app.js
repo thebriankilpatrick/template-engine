@@ -67,3 +67,29 @@ buildTeam()
 
 // Can I use template literal, and set as a variable
 // This variable could be equal to a template literal of the card?
+// FOR EXAMPLE-----------
+
+const engineer = [
+    `
+    <div class="col s6 m4 l4">
+        <div class="card grey lighten-4 uk-card-hover">
+            <div class="card-content">
+                <div>
+                    <i class="fas fa-laptop-code fa-3x" id="titleIcon"></i>
+                </div>
+                <div class="cardName">
+                    <span class="card-title">Name</span>
+                    <p class="uk-text-meta uk-margin-remove-top">Engineer</p>
+                </div>
+                <br>
+                <p>ID:</p>
+                <p>Github:</p>
+            </div>
+            <div class="card-action">
+                <a href="#">Email?</a>
+            </div>
+        </div>
+    </div>
+    `
+]
+// Not sure this would work, because it would only store one employee of that type
