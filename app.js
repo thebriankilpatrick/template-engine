@@ -34,14 +34,14 @@ function buildTeam() {
         }
     ]).then(function(answers) {
         promptEngineers(answers);
-        writeFile(answers);
     })
 }
 
 buildTeam();
 
 let i = 0;
-
+let engineerArray = [];
+// TODO:  declare engeneers array here
 function promptEngineers(answers) {
     i++;
     inquirer.prompt([
@@ -49,14 +49,34 @@ function promptEngineers(answers) {
             type: "input",
             name: "engName",
             message: `What is the #${i} engineer's name?`
+        },
+        {
+            type: "input",
+            name: "engID",
+            message: `What is the #${i} engineer's ID number?`
+        },
+        {
+            type: "input",
+            name: "engEmail",
+            message: `What is #${i} engineer's email?`
+        },
+        {
+            type: "input",
+            name: "engGithub",
+            message: `What is the #${i} engineer's Github?`
         }
     ]).then(function(engineers) {
-        console.log(engineers.engName);
+        const engineer = new Engineer(engineers.engName, engineers.engID, engineers.engEmail, "Engineer", engineers.engGithub);
+        engineerArray.push(engineer);
         if (i >= answers.engAmount) {
-            console.log("End of prompt.......");
+            // console.log(engineerArray)
+            console.log(`Created ${i} engineeer cards.`);
+            writeFile(answers);
         }
         else {
-        promptEngineers(answers); // Recursion
+            // TODO: pass info to array, by using a construtor. So we end up with the array of Engineer constructors
+            // console.log(engineerArray);
+            promptEngineers(answers); // Recursion
         }
     })
 }
@@ -66,10 +86,13 @@ const writeFile = function(answers) {
     //     if (err) throw err;
     //     writeFileAsync(__dirname + "/output/team.html", data);
     // })
+    // console.log(engineerArray);
     const html = generateHTML(answers);
     writeFileAsync(__dirname + "/output/team.html", html);
 } 
-function generateHTML(answers) {
+
+
+function generateHTML(answers, engineer) {
     return `
     <!DOCTYPE html>
 <html>
@@ -94,7 +117,7 @@ function generateHTML(answers) {
 
         <div class="container">
             <div class="row">
-                
+                ${generateEngineerHTML(engineer)}
             </div>
         </div>
         
@@ -102,6 +125,50 @@ function generateHTML(answers) {
 </html>
     `
 }
+
+function generateEngineerHTML(engineerArray) {
+    // _---------------engineerArray is undefined.  Find out why..----------------------------------------------------------
+    console.log(engineerArray);
+
+    let engHTML = ``;
+
+    for(var en = 0; en < engineerArray.length; en++) {
+        engHTML += engineerTemplate(engineerArray[en]);
+    }
+
+    return engHTML;
+}
+
+function engineerTemplate(engineer) {
+    console.log(engineerArray);
+    return  `
+    <div class="col s6 m4 l4">
+    <div class="card grey lighten-4 uk-card-hover">
+        <div class="card-content">
+            <div>
+                <i class="fas fa-laptop-code fa-3x" id="titleIcon"></i>
+            </div>
+            <div class="cardName">
+                <span class="card-title">${engineer.name}</span>
+                <p class="uk-text-meta uk-margin-remove-top">Engineer</p>
+            </div>
+            <br>
+            <p>ID:${engineer.id}</p>
+            <p>Github:${Engineer.github}</p>
+        </div>
+        <div class="card-action">
+            <a href="#">${engineer.email}</a>
+        </div>
+    </div>
+</div>
+    `
+}
+
+
+
+
+
+
 
 // For manager creation, and html skeleton creation
 // buildTeam()
