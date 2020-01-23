@@ -9,12 +9,7 @@ const util = require("util");
 
 const writeFileAsync = util.promisify(fs.writeFile);
 
-// Use inquirer to prompt the user to build an engineering team
-// The engineering team should consist of one manager
-// And any number of engineers and interns
 
-// Inquirer function to prompt user for...
-// email, id, and specific info based on instance
 function buildTeam() {
     inquirer.prompt([
         {
@@ -38,6 +33,33 @@ function buildTeam() {
 }
 
 buildTeam();
+
+function promptManager() {
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "manName",
+            message: "What is the manager's name?"
+        },
+        {
+            type: "input",
+            name: "manID",
+            message: "What is the manager's ID number?"
+        },
+        {
+            type: "input",
+            name: "manEmail",
+            message: "What is the manager's email?"
+        },
+        {
+            type: "input",
+            name: "officeNumber",
+            message: "What is the manager's office number?"
+        }
+    ]).then(function(managers) {
+        const manager = new Manager(managers.manName, managers.manID, managers.manEmail, "Manager", managers.officeNumber);
+    })
+}
 
 let i = 0;
 let engineerArray = [];
@@ -70,10 +92,48 @@ function promptEngineers(answers) {
         engineerArray.push(engineer);
         if (i >= answers.engAmount) {
             console.log(`Created ${i} engineer cards.`);
-            writeFile(answers);
+            promptInterns(answers);
         }
         else {
             promptEngineers(answers); // Recursion
+        }
+    })
+}
+
+let internArray = [];
+
+function promptInterns(answers) {
+    i++;
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "intName",
+            message: `What is the #${i} intern's name?`
+        },
+        {
+            type: "input",
+            name: "intID",
+            message: `What is the #${i} intern's ID number?`
+        },
+        {
+            type: "input",
+            name: "intEmail",
+            message: `What is #${i} intern's email?`
+        },
+        {
+            type: "input",
+            name: "intSchool",
+            message: `Where does the #${i} intern go to school?`
+        }
+    ]).then(function(interns) {
+        const intern = new Intern(interns.intName, interns.intID, interns.intEmail, "Intern", interns.intSchool);
+        internArray.push(intern);
+        if (i >= internArray.length) {
+            console.log(`Created ${i} intern cards.`);
+            writeFile(answers);
+        }
+        else {
+            promptInterns(answers); // Recursion
         }
     })
 }
@@ -89,7 +149,7 @@ const writeFile = function(answers) {
 } 
 
 
-function generateHTML(answers, engineer) {
+function generateHTML(answers, engineer, intern) {
     return `
     <!DOCTYPE html>
 <html>
@@ -115,6 +175,7 @@ function generateHTML(answers, engineer) {
         <div class="container">
             <div class="row">
                 ${generateEngineerHTML(engineer, engineerArray)}
+                ${generateInternHTML(intern, internArray)}
             </div>
         </div>
         
@@ -155,6 +216,41 @@ function engineerTemplate(engineer) {
         </div>
     </div>
 </div>
+    `
+}
+
+function generateInternHTML(intern) {
+
+    let intHTML = ``;
+
+    for(var int = 0; int < internArray.length; int++) {
+        intHTML += internTemplate(internArray[int]);
+    }
+
+    return intHTML;
+}
+
+function internTemplate(intern) {
+    return `
+    <div class="col s6 m4 l4">
+        <div class="card grey lighten-4 uk-card-hover">
+            <div class="card-content">
+                <div>
+                    <i class="fas fa-user-graduate fa-3x" id="titleIcon"></i>
+                </div>
+                <div class="cardName">
+                    <span class="card-title">${intern.name}</span>
+                    <p class="uk-text-meta uk-margin-remove-top">Intern</p>
+                </div>
+                <br>
+                <p>ID: ${intern.id}</p>
+                <p>School: ${intern.school}</p>
+            </div>
+            <div class="card-action">
+                <a href="#">${intern.email}</a>
+            </div>
+        </div>
+    </div>
     `
 }
 
