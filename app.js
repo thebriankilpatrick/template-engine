@@ -30,7 +30,7 @@ function buildTeam() {
         {
             type: "input",
             name: "intAmount",
-            message: "How many intern are on your team?"
+            message: "How many interns are on your team?"
         }
     ]).then(function(answers) {
         promptEngineers(answers);
@@ -41,7 +41,7 @@ buildTeam();
 
 let i = 0;
 let engineerArray = [];
-// TODO:  declare engeneers array here
+
 function promptEngineers(answers) {
     i++;
     inquirer.prompt([
@@ -69,13 +69,10 @@ function promptEngineers(answers) {
         const engineer = new Engineer(engineers.engName, engineers.engID, engineers.engEmail, "Engineer", engineers.engGithub);
         engineerArray.push(engineer);
         if (i >= answers.engAmount) {
-            // console.log(engineerArray)
-            console.log(`Created ${i} engineeer cards.`);
+            console.log(`Created ${i} engineer cards.`);
             writeFile(answers);
         }
         else {
-            // TODO: pass info to array, by using a construtor. So we end up with the array of Engineer constructors
-            // console.log(engineerArray);
             promptEngineers(answers); // Recursion
         }
     })
@@ -117,7 +114,7 @@ function generateHTML(answers, engineer) {
 
         <div class="container">
             <div class="row">
-                ${generateEngineerHTML(engineer)}
+                ${generateEngineerHTML(engineer, engineerArray)}
             </div>
         </div>
         
@@ -126,9 +123,7 @@ function generateHTML(answers, engineer) {
     `
 }
 
-function generateEngineerHTML(engineerArray) {
-    // _---------------engineerArray is undefined.  Find out why..----------------------------------------------------------
-    console.log(engineerArray);
+function generateEngineerHTML(engineer) {
 
     let engHTML = ``;
 
@@ -140,7 +135,6 @@ function generateEngineerHTML(engineerArray) {
 }
 
 function engineerTemplate(engineer) {
-    console.log(engineerArray);
     return  `
     <div class="col s6 m4 l4">
     <div class="card grey lighten-4 uk-card-hover">
@@ -154,7 +148,7 @@ function engineerTemplate(engineer) {
             </div>
             <br>
             <p>ID:${engineer.id}</p>
-            <p>Github:${Engineer.github}</p>
+            <p>Github:${engineer.github}</p>
         </div>
         <div class="card-action">
             <a href="#">${engineer.email}</a>
@@ -164,27 +158,3 @@ function engineerTemplate(engineer) {
     `
 }
 
-
-
-
-
-
-
-// For manager creation, and html skeleton creation
-// buildTeam()
-//     .then(function(answers) {
-//         const html = generateHTML(answers);
-
-//         return writeFileAsync("./output/index.html", html);
-//     })
-//     .then(function() {
-//         console.log("Successfully created team cards!");
-//     })
-//     .catch(function(err) {
-//         console.log(err);
-// })
-// Add .then() to prompt for employee creation (engineer or intern)
-// WAIT.  .appendFile() will add new content to the end of the html file.  
-// This means it will add it after the </html> tag...
-
-// RETHINK THE WRITE FILE FUNCTION
