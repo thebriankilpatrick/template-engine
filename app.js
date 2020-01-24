@@ -28,13 +28,15 @@ function buildTeam() {
             message: "How many interns are on your team?"
         }
     ]).then(function(answers) {
-        promptEngineers(answers);
+        promptManager(answers);
     })
 }
 
 buildTeam();
 
-function promptManager() {
+let theManager = [];
+
+function promptManager(answers) {
     inquirer.prompt([
         {
             type: "input",
@@ -58,9 +60,13 @@ function promptManager() {
         }
     ]).then(function(managers) {
         const manager = new Manager(managers.manName, managers.manID, managers.manEmail, "Manager", managers.officeNumber);
+        console.log(manager);
+        theManager.push(manager);
+        promptEngineers(answers);
     })
 }
 
+// ------------------------------------------THE VALUE OF "i" CONTINUES TO INCREASE IN INTERN FUNCTIONALITY ------------------------
 let i = 0;
 let engineerArray = [];
 
@@ -149,7 +155,7 @@ const writeFile = function(answers) {
 } 
 
 
-function generateHTML(answers, engineer, intern) {
+function generateHTML(answers, engineer, intern, manager) {
     return `
     <!DOCTYPE html>
 <html>
@@ -174,6 +180,7 @@ function generateHTML(answers, engineer, intern) {
 
         <div class="container">
             <div class="row">
+                ${generateManagerHTML(manager)}
                 ${generateEngineerHTML(engineer, engineerArray)}
                 ${generateInternHTML(intern, internArray)}
             </div>
@@ -181,6 +188,37 @@ function generateHTML(answers, engineer, intern) {
         
     </body>
 </html>
+    `
+}
+
+function generateManagerHTML(manager) {
+    let manHTML = ``;
+    manHTML += managerTemplate(manager);
+
+    return manHTML;
+}
+
+function managerTemplate(manager) {
+    return `
+    <div class="col s6 m4 l4">
+        <div class="card grey lighten-4 uk-card-hover">
+            <div class="card-content">
+                <div>
+                    <i class="fas fa-user-tie fa-3x" id="titleIcon"></i>
+                </div>
+                <div class="cardName">
+                    <span class="card-title">${Manager.name}</span>
+                    <p class="uk-text-meta uk-margin-remove-top">Manager</p>
+                </div>
+                <br>
+                <p>ID: ${Manager.id}</p>
+                <p>Office Number: ${Manager.officeNumber}</p>
+            </div>
+            <div class="card-action">
+                <a href="#">${Manager.email}</a>
+            </div>
+        </div>
+    </div>
     `
 }
 
