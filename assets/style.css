@@ -3,7 +3,15 @@
     font-family: 'Montserrat', sans-serif;
 }
 
+.container {
+    margin-top: 15px;
+}
+
 #titleIcon {
     float: left;
     margin-right: 5px;
+}
+
+a:hover {
+    color: rgb(134, 206, 230) !important;
 }

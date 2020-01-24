@@ -59,7 +59,7 @@ function promptManager(answers) {
             message: "What is the manager's office number?"
         }
     ]).then(function(managers) {
-        const manager = new Manager(managers.manName, managers.manID, managers.manEmail, managers.officeNumber);
+        const manager = new Manager(managers.manName, managers.manID, managers.manEmail, managers.officeNumber, "Manager");
         theManager.push(manager);
         if (answers.engAmount > 0) {
             promptEngineers(answers);
@@ -253,8 +253,8 @@ function engineerTemplate(engineer) {
                 <p class="uk-text-meta uk-margin-remove-top">Engineer</p>
             </div>
             <br>
-            <p>ID:${engineer.id}</p>
-            <p>Github:${engineer.github}</p>
+            <p>ID: ${engineer.id}</p>
+            <p>Github: ${engineer.github}</p>
         </div>
         <div class="card-action">
             <a href="#">${engineer.email}</a>
