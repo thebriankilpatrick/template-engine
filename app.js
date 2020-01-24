@@ -59,14 +59,14 @@ function promptManager(answers) {
             message: "What is the manager's office number?"
         }
     ]).then(function(managers) {
-        const manager = new Manager(managers.manName, managers.manID, managers.manEmail, "Manager", managers.officeNumber);
+        const manager = new Manager(managers.manName, managers.manID, managers.manEmail, managers.officeNumber);
         console.log(manager);
         theManager.push(manager);
         promptEngineers(answers);
     })
 }
 
-// ------------------------------------------THE VALUE OF "i" CONTINUES TO INCREASE IN INTERN FUNCTIONALITY ------------------------
+// ------------------------------------------Double check the value of i------------------------
 let i = 0;
 let engineerArray = [];
 
@@ -94,10 +94,11 @@ function promptEngineers(answers) {
             message: `What is the #${i} engineer's Github?`
         }
     ]).then(function(engineers) {
-        const engineer = new Engineer(engineers.engName, engineers.engID, engineers.engEmail, "Engineer", engineers.engGithub);
+        const engineer = new Engineer(engineers.engName, engineers.engID, engineers.engEmail, engineers.engGithub);
         engineerArray.push(engineer);
         if (i >= answers.engAmount) {
             console.log(`Created ${i} engineer cards.`);
+            i = 0;
             promptInterns(answers);
         }
         else {
@@ -132,7 +133,7 @@ function promptInterns(answers) {
             message: `Where does the #${i} intern go to school?`
         }
     ]).then(function(interns) {
-        const intern = new Intern(interns.intName, interns.intID, interns.intEmail, "Intern", interns.intSchool);
+        const intern = new Intern(interns.intName, interns.intID, interns.intEmail, interns.intSchool);
         internArray.push(intern);
         if (i >= internArray.length) {
             console.log(`Created ${i} intern cards.`);
