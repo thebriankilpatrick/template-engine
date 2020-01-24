@@ -60,13 +60,19 @@ function promptManager(answers) {
         }
     ]).then(function(managers) {
         const manager = new Manager(managers.manName, managers.manID, managers.manEmail, managers.officeNumber);
-        console.log(manager);
         theManager.push(manager);
-        promptEngineers(answers);
+        if (answers.engAmount > 0) {
+            promptEngineers(answers);
+        }
+        else if (answers.intAmount > 0) {
+            promptInterns(answers);
+        }
+        else {
+            writeFile(answers);
+        }
     })
 }
 
-// ------------------------------------------Double check the value of i------------------------
 let i = 0;
 let engineerArray = [];
 
@@ -99,7 +105,12 @@ function promptEngineers(answers) {
         if (i >= answers.engAmount) {
             console.log(`Created ${i} engineer cards.`);
             i = 0;
-            promptInterns(answers);
+            if (answers.intAmount > 0) {
+                promptInterns(answers);
+            }
+            else {
+                writeFile(answers);
+            }
         }
         else {
             promptEngineers(answers); // Recursion
@@ -135,7 +146,7 @@ function promptInterns(answers) {
     ]).then(function(interns) {
         const intern = new Intern(interns.intName, interns.intID, interns.intEmail, interns.intSchool);
         internArray.push(intern);
-        if (i >= internArray.length) {
+        if (i >= answers.intAmount) {
             console.log(`Created ${i} intern cards.`);
             writeFile(answers);
         }
@@ -146,11 +157,6 @@ function promptInterns(answers) {
 }
 
 const writeFile = function(answers) {
-    // fs.readFile(__dirname + "/templates/main.html", function(err, data) {
-    //     if (err) throw err;
-    //     writeFileAsync(__dirname + "/output/team.html", data);
-    // })
-    // console.log(engineerArray);
     const html = generateHTML(answers);
     writeFileAsync(__dirname + "/output/team.html", html);
 } 
@@ -194,7 +200,7 @@ function generateHTML(answers, engineer, intern, manager) {
 
 function generateManagerHTML(manager) {
     let manHTML = ``;
-    manHTML += managerTemplate(manager);
+    manHTML += managerTemplate(theManager[0]);
 
     return manHTML;
 }
@@ -208,15 +214,15 @@ function managerTemplate(manager) {
                     <i class="fas fa-user-tie fa-3x" id="titleIcon"></i>
                 </div>
                 <div class="cardName">
-                    <span class="card-title">${Manager.name}</span>
+                    <span class="card-title">${manager.name}</span>
                     <p class="uk-text-meta uk-margin-remove-top">Manager</p>
                 </div>
                 <br>
-                <p>ID: ${Manager.id}</p>
-                <p>Office Number: ${Manager.officeNumber}</p>
+                <p>ID: ${manager.id}</p>
+                <p>Office Number: ${manager.officeNumber}</p>
             </div>
             <div class="card-action">
-                <a href="#">${Manager.email}</a>
+                <a href="#">${manager.email}</a>
             </div>
         </div>
     </div>
