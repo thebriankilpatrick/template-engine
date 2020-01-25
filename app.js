@@ -9,7 +9,7 @@ const util = require("util");
 
 const writeFileAsync = util.promisify(fs.writeFile);
 
-
+// Prompt for initial questions: Team name, how many engineers, and how many interns
 function buildTeam() {
     inquirer.prompt([
         {
@@ -36,6 +36,7 @@ buildTeam();
 
 let theManager = [];
 
+// Prompt for information about the manager
 function promptManager(answers) {
     inquirer.prompt([
         {
@@ -61,6 +62,9 @@ function promptManager(answers) {
     ]).then(function(managers) {
         const manager = new Manager(managers.manName, managers.manID, managers.manEmail, managers.officeNumber, "Manager");
         theManager.push(manager);
+        console.log("Manager card has been created.");
+
+        // If else to check if there are any engineers or interns in the team
         if (answers.engAmount > 0) {
             promptEngineers(answers);
         }
@@ -76,6 +80,7 @@ function promptManager(answers) {
 let i = 0;
 let engineerArray = [];
 
+// Prompt for information about the engineers
 function promptEngineers(answers) {
     i++;
     inquirer.prompt([
@@ -105,6 +110,8 @@ function promptEngineers(answers) {
         if (i >= answers.engAmount) {
             console.log(`Created ${i} engineer cards.`);
             i = 0;
+
+            // If else to see if there are any interns
             if (answers.intAmount > 0) {
                 promptInterns(answers);
             }
@@ -120,6 +127,7 @@ function promptEngineers(answers) {
 
 let internArray = [];
 
+// Prompt for information about the interns
 function promptInterns(answers) {
     i++;
     inquirer.prompt([
@@ -161,7 +169,7 @@ const writeFile = function(answers) {
     writeFileAsync(__dirname + "/output/team.html", html);
 } 
 
-
+// Main html skeleton
 function generateHTML(answers, engineer, intern, manager) {
     return `
     <!DOCTYPE html>
@@ -205,6 +213,7 @@ function generateManagerHTML(manager) {
     return manHTML;
 }
 
+// Manager card
 function managerTemplate(manager) {
     return `
     <div class="col s6 m4 l4">
@@ -240,6 +249,7 @@ function generateEngineerHTML(engineer) {
     return engHTML;
 }
 
+// Engineer card
 function engineerTemplate(engineer) {
     return  `
     <div class="col s6 m4 l4">
@@ -275,6 +285,7 @@ function generateInternHTML(intern) {
     return intHTML;
 }
 
+// Intern card
 function internTemplate(intern) {
     return `
     <div class="col s6 m4 l4">
