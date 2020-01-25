@@ -11,7 +11,7 @@ The user will then be prompted to answer questions about the team, and its size.
 See the gif below on an example of those prompts.  
 For the sake of the gif's size, let's create a team of just one engineer and one intern.  
 
-
+![templateEngineGif](https://user-images.githubusercontent.com/43326943/73122979-95bbb480-3f58-11ea-963a-2da7dcb803be.gif)  
 
 After following the prompts, and creating a team, a team.html page will be generated.  
 The team.html page will display the team, in cards by individual.  
