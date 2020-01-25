@@ -18,7 +18,7 @@ The team.html page will display the team, in cards by individual.
 
 Below, I have included a snip it of an example team.html page, with two engineers and two interns.  
 
-
+![teamHTMLSnip](https://user-images.githubusercontent.com/43326943/73122984-ac620b80-3f58-11ea-8df4-77f34da24c72.PNG)  
 
 ### Installation  
 In order to run this application, the user will need to install some npm packages.  
